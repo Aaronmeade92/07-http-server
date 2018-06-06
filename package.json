@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Aaronmeade92/07-http-server#readme",
   "dependencies": {
+    "cowsay": "^1.3.0",
     "jest": "^23.1.0"
   }
 }

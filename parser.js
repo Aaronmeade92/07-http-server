@@ -1,7 +1,7 @@
 'use strict'
 
 const url = require('url');
-const queryStrint = require('queryString');
+const queryString = require('querystring');
 
 module.exports = (req) => {
 
