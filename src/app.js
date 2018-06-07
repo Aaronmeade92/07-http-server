@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const http = require('http');
 const parser = require('./lib/parser.js');
@@ -17,7 +17,7 @@ const requestHandler = (req, res) => {
         .then(req => {
 
             if (req.method === 'GET' && req.url.pathname === '/') {
-                
+
                 makeHtmlResponse(res);
 
                 fs.readFile('index.html', (err, data) => {
@@ -44,7 +44,7 @@ const requestHandler = (req, res) => {
                     res.end();
                 });
                 return;
-            }else if (req.method === 'GET' && req.url.pathname === '/cowsays') {
+            } else if (req.method === 'GET' && req.url.pathname === '/cowsays') {
 
                 // cowasy with query text
                 //make cowsay.html file
@@ -56,15 +56,17 @@ const requestHandler = (req, res) => {
                         throw err
                     }
                     let html = data.toString();
-                    let cowsayText = cowsay.say({ text: 'say anything'});
-                    res.write(html.replace('{{cowsay}}',cowsayText));
+                    let cowsayText = cowsay.say({
+                        text: 'say anything'
+                    });
+                    res.write(html.replace('{{cowsay}}', cowsayText));
                     res.end();
-                    
+
                 });
                 return;
 
             } else if (req.method === 'GET' && req.url.pathname === '/api/cowsay') {
-                
+
                 res.setHeader('Content-Type', 'text/json');
                 res.statusCode = 200;
                 res.statusMessage = 'good';
@@ -74,30 +76,36 @@ const requestHandler = (req, res) => {
                         throw err
                     }
                     let html = data.toString();
-                    let cowsayText = cowsay.say({text: req.url.query.text});
-                    res.write(html.replace('{{cowsay}}',cowsayText));
+                    let cowsayText = cowsay.say({
+                        text: req.url.query.text
+                    });
+                    res.write(html.replace('{{cowsay}}', cowsayText));
                     res.end();
-                    
+
                 });
 
-            } else if(req.method === 'POST' && req.url.pathname === '/api/cowsay') {
+            } else if (req.method === 'POST' && req.url.pathname === '/api/cowsay') {
                 res.setHeader('Content-Type', 'text/json');
                 res.statusCode = 200;
                 res.statusMessage = 'good';
                 let query = '';
 
-                if(!req.body.text) {
-                    query = {Error: 'Invalid query made'};
+                if (!req.body.text) {
+                    query = {
+                        Error: 'Invalid query made'
+                    };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 400;
                 } else {
-                    query = {content : req.body.text};
+                    query = {
+                        content: req.body.text
+                    };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 200;
                 }
 
 
-            }else {
+            } else {
                 res.setHeader('Content-Type', 'text/html');
                 res.statusCode = 404;
                 res.statusMessage = 'Not Found';
