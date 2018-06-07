@@ -1,6 +1,7 @@
 'use strict'
+
 const superagent = require('superagent');
-const app = require('./src/app.js')
+const app = require('./src/app.js');
 
 
 describe('Server Module', () => {
@@ -21,9 +22,9 @@ describe('Server Module', () => {
         });
     });
     
-    xit('Should return html with a project description and anchor to /cowsay', () => {
+    // xit('Should return html with a project description and anchor to /cowsay', () => {
 
-        let expected = 'GET'
-        let 
-    })
+    //     let expected = 'GET '
+    //     let 
+    // })
 })
