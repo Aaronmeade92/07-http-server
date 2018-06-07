@@ -91,18 +91,18 @@ const requestHandler = (req, res) => {
 
 
                 if (!req.body.text) {
-                    query = {
+                    let query = {
                         Error: 'Invalid query made',
                     };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 400;
                 } else {
-                    query = {
+                    let query = {
                         content: req.body.text,
                     };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 200;
-                };
+                }
 
 
             } else {
@@ -111,7 +111,7 @@ const requestHandler = (req, res) => {
                 res.statusMessage = 'Not Found';
                 res.write('Resource Not Found');
                 res.end();
-            };
+            }
         })
         .catch(err => {
             console.log(err);
