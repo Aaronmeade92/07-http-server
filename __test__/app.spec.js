@@ -36,7 +36,7 @@ describe('Server Module', () => {
         return superagent.get('http://localhost:3000/cowsays')
           .then(response => {
             expect(response.statusCode).toEqual(200);
-            expect(response.text).toEqual(expect.stringContaining('moooo'));
+            expect(response.text).toEqual(expect.stringContaining('say anything'));
           })
           .catch(console.err);
     
