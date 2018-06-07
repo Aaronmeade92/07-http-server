@@ -1,7 +1,7 @@
 'use strict'
 
 const http = require('http');
-const parser = require('../parser');
+const parser = require('./lib/parser.js');
 const fs = require('fs');
 const cowsay = require('cowsay');
 

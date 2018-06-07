@@ -1,7 +1,7 @@
 'use strict'
 
 const superagent = require('superagent');
-const app = require('./src/app.js');
+const app = require('../src/app.js');
 
 
 describe('Server Module', () => {
@@ -22,9 +22,23 @@ describe('Server Module', () => {
         });
     });
     
-    // xit('Should return html with a project description and anchor to /cowsay', () => {
+    it('Should return html with a project description and anchor to /cowsay', () => {
 
-    //     let expected = 'GET '
-    //     let 
-    // })
+
+        return superagent.get('http://localhost:3000/cowsay')
+        .catch(response => {
+            expect(response.status).toEqual(200);
+        })
+    })
+
+    it('handles a get request with a query string', () => {
+
+        return superagent.get('http://localhost:3000/cowsays')
+          .then(response => {
+            expect(response.statusCode).toEqual(200);
+            expect(response.text).toEqual(expect.stringContaining('moooo'));
+          })
+          .catch(console.err);
+    
+      });
 })
