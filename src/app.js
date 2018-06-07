@@ -53,11 +53,11 @@ const requestHandler = (req, res) => {
 
                 fs.readFile('cowsay.html', (err, data) => {
                     if (err) {
-                        throw err
+                        throw err;
                     }
                     let html = data.toString();
                     let cowsayText = cowsay.say({
-                        text: 'say anything'
+                        text: 'say anything',
                     });
                     res.write(html.replace('{{cowsay}}', cowsayText));
                     res.end();
@@ -73,11 +73,11 @@ const requestHandler = (req, res) => {
 
                 fs.readFile('cowsay.html', (err, data) => {
                     if (err) {
-                        throw err
+                        throw err;
                     }
                     let html = data.toString();
                     let cowsayText = cowsay.say({
-                        text: req.url.query.text
+                        text: req.url.query.text,
                     });
                     res.write(html.replace('{{cowsay}}', cowsayText));
                     res.end();
@@ -88,21 +88,21 @@ const requestHandler = (req, res) => {
                 res.setHeader('Content-Type', 'text/json');
                 res.statusCode = 200;
                 res.statusMessage = 'good';
-                let query = '';
+
 
                 if (!req.body.text) {
                     query = {
-                        Error: 'Invalid query made'
+                        Error: 'Invalid query made',
                     };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 400;
                 } else {
                     query = {
-                        content: req.body.text
+                        content: req.body.text,
                     };
                     res.setHeader('Content-Type', 'text/json');
                     res.statusCode = 200;
-                }
+                };
 
 
             } else {
@@ -111,14 +111,14 @@ const requestHandler = (req, res) => {
                 res.statusMessage = 'Not Found';
                 res.write('Resource Not Found');
                 res.end();
-            }
+            };
         })
         .catch(err => {
             console.log(err);
             res.writeHead(500);
             res.write(err);
             res.end();
-        })
+        });
 };
 
 const app = http.createServer(requestHandler);
