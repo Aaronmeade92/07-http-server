@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const http = require('http');
 const parser = require('./lib/parser.js');
@@ -6,116 +6,114 @@ const fs = require('fs');
 const cowsay = require('cowsay');
 
 function makeHtmlResponse(res) {
-    res.setHeader('Content-Type', 'text/html');
-    res.statusCode = 200;
-    res.statusMessage = 'good';
+  res.setHeader('Content-Type', 'text/html');
+  res.statusCode = 200;
+  res.statusMessage = 'good';
 }
 
 const requestHandler = (req, res) => {
 
-    parser(req)
-        .then(req => {
+  parser(req)
+    .then(req => {
 
-            if (req.method === 'GET' && req.url.pathname === '/') {
-                
-                makeHtmlResponse(res);
+      if (req.method === 'GET' && req.url.pathname === '/') {
 
-                fs.readFile('index.html', (err, data) => {
-                    if (err) {
-                        throw err;
-                    } else {
-                        console.log(data);
-                    }
+        makeHtmlResponse(res);
 
-                    let text = data.toString();
-                    res.write(text);
-                    res.end();
-                });
+        fs.readFile('index.html', (err, data) => {
+          if (err) {
+            throw err;
+          } else {
+            console.log(data);
+          }
 
-                return;
-            } else if (req.method === 'GET' && req.url.pathname === '/cowsay') {
+          let text = data.toString();
+          res.write(text);
+          res.end();
+        });
 
-                makeHtmlResponse(res);
+        return;
+        
+      }  else if (req.method === 'GET' && req.url.pathname === '/cowsays') {
 
-                fs.readFile('cowsay.html', (err, data) => {
+        makeHtmlResponse(res);
 
-                    let text = data.toString();
-                    res.write(text);
-                    res.end();
-                });
-                return;
-            }else if (req.method === 'GET' && req.url.pathname === '/cowsays') {
+        fs.readFile('cowsay.html', (err, data) => {
+          if (err) {
+            throw err;
+          }
+          let html = data.toString();
+          let cowsayText = cowsay.say({
+            text: 'What does the cow say?',
+          });
+          res.write(html.replace('{{cowsay}}', cowsayText));
 
-                // cowasy with query text
-                //make cowsay.html file
+          res.end();
 
-                makeHtmlResponse(res);
+        });
+        return;
 
-                fs.readFile('cowsay.html', (err, data) => {
-                    if (err) {
-                        throw err
-                    }
-                    let html = data.toString();
-                    let cowsayText = cowsay.say({ text: 'say anything'});
-                    res.write(html.replace('{{cowsay}}',cowsayText));
-                    res.end();
-                    
-                });
-                return;
+      } else if (req.method === 'GET' && req.url.pathname === '/cowsay') {
 
-            } else if (req.method === 'GET' && req.url.pathname === '/api/cowsay') {
-                
-                res.setHeader('Content-Type', 'text/json');
-                res.statusCode = 200;
-                res.statusMessage = 'good';
+        makeHtmlResponse(res);
 
-                fs.readFile('cowsay.html', (err, data) => {
-                    if (err) {
-                        throw err
-                    }
-                    let html = data.toString();
-                    let cowsayText = cowsay.say({text: req.url.query.text});
-                    res.write(html.replace('{{cowsay}}',cowsayText));
-                    res.end();
-                    
-                });
+        fs.readFile('cowsay.html', (err, data) => {
+          if (err) {
+            throw err;
+          }
+          let html = data.toString();
+          console.log(html, 'HTML');
+          
 
-            } else if(req.method === 'POST' && req.url.pathname === '/api/cowsay') {
-                res.setHeader('Content-Type', 'text/json');
-                res.statusCode = 200;
-                res.statusMessage = 'good';
-                let query = '';
+          let cowsayQueryText = cowsay.say({text: req.url.query.text});
 
-                if(!req.body.text) {
-                    query = {Error: 'Invalid query made'};
-                    res.setHeader('Content-Type', 'text/json');
-                    res.statusCode = 400;
-                } else {
-                    query = {content : req.body.text};
-                    res.setHeader('Content-Type', 'text/json');
-                    res.statusCode = 200;
-                }
+          res.write(html.replace('{{cowsay}}', cowsayQueryText));
+
+          res.end();
+
+        });
+        return;
+
+      }  else if (req.method === 'POST' && req.url.pathname === '/api/cowsay') {
+        res.setHeader('Content-Type', 'text/json');
+        res.statusCode = 200;
+        res.statusMessage = 'good';
 
 
-            }else {
-                res.setHeader('Content-Type', 'text/html');
-                res.statusCode = 404;
-                res.statusMessage = 'Not Found';
-                res.write('Resource Not Found');
-                res.end();
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.writeHead(500);
-            res.write(err);
-            res.end();
-        })
+        if (!req.body.text) {
+          let query = {
+            Error: 'Invalid query made',
+          };
+          res.setHeader('Content-Type', 'text/json');
+          res.statusCode = 400;
+        } else {
+          let query = {
+            content: req.body.text,
+          };
+          res.setHeader('Content-Type', 'text/json');
+          res.statusCode = 200;
+        }
+
+
+      } else {
+        res.setHeader('Content-Type', 'text/html');
+        res.statusCode = 404;
+        res.statusMessage = 'Not Found';
+        res.write('Resource Not Found');
+        res.end();
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500);
+      res.write(err);
+      res.end();
+    });
 };
 
 const app = http.createServer(requestHandler);
 
 module.exports = {
-    start: (port, callback) => app.listen(port, callback),
-    stop: (callback) => app.close(callback),
+  start: (port, callback) => app.listen(port, callback),
+  stop: (callback) => app.close(callback),
 };
