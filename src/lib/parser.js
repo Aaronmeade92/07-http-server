@@ -11,13 +11,13 @@ module.exports = (req) => {
             reject('Invalid REquest Object. Cannot Parse')
         }
 
-        console.log('pre', req.url);
+        // console.log('pre', req.url);
         req.url = url.parse(req.url);
-        console.log('post', req.url);
+        // console.log('post', req.url);
 
         req.url.query = queryString.parse(req.url.query);
 
-        console.log('url.query', req.url.query);
+        // console.log('url.query', req.url.query);
 
         if (!req.method.match(/POST|PUT|PATCH/)) {
             resolve(req);
